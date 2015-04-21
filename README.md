@@ -7,6 +7,8 @@ Quick environment to try closure-library and less with wap libraries.
 ```
 $ git clone git@scm.hue.workslan:takamura_s/sandbox.git
 $ cd sandbox
+$ vi plovr.json  # edit path to your JavaScript libraries
+$ vi Gulpfile.js  # edit path to your Less libraries
 $ npm install
 ```
 
