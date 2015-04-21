@@ -1,8 +1,10 @@
 {
   "name": "sandbox",
   "scripts": {
+    "postinstall": "gulp",
     "plovr": "plovr build plovr.json",
-    "fixclosure": "find src/ -name "*.js" | xargs ./node_modules/.bin/fixclosure -f"
+    "fixclosure": "find src -name '*.js' | xargs ./node_modules/.bin/fixclosure -f",
+    "start": "gulp watch"
   },
   "author": "takamura_s@ariel-networks.com",
   "license": "ISC",

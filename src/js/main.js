@@ -23,9 +23,10 @@ $element.querySelector('.timeline-secretary-arrow--right').addEventListener('cli
 
 show(currentIndex = 0);
 
-setTimeout(function() {
+// To make developer notice if the JavaScript runs in a browser, comment out deferring logic
+// setTimeout(function() {
   goog.dom.classlist.add($container, 'timeline-secretary-container--transitionable');
-}, 50);
+// }, 50);
 
 function show(index) {
   cards.forEach(function(card, i) {
