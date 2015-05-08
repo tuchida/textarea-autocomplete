@@ -1,6 +1,8 @@
 @charset "utf-8";
+@import "common.less";
 @import "common/base/variables.less";
 @import "common/base/prefixer.less";
+@import "common/layout/grid.less";
 @import "common/base/mixins.less";
 
 
@@ -201,3 +203,60 @@
     }
 }
 
+
+
+
+@import "components/popover.less";
+.timeline-secretary-setting-popover {
+    background-color: white !important;
+    display: block !important;
+    width: @size-base * 50;
+    min-height: @size-base * 25;
+    &.right .arrow {
+        top: 90px;
+    }
+    .close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+    }
+    .popover-html-content {
+        padding: @size-base * 2;
+    }
+    .popover-lead {
+        color: @text-hint;
+        margin-bottom: @size-base * 3;
+    }
+    .popover-row {
+        .row();
+        margin-bottom: @size-base;
+        padding-top: @size-base / 2;
+        padding-bottom: @size-base / 2;
+        border-bottom: 1px dotted #e8e8e8;
+        &:last-of-child {
+            border-bottom: none;
+        }
+        cursor: pointer;
+        .user-select(none);
+    }
+    .popover-row-open {
+    }
+    .popover-subbox {
+        height: 0;
+        overflow: hidden;
+    }
+    .popover-subbox-open {
+        height: auto;
+    }
+    .popover-subbox-inner {
+        padding: 8px;
+    }
+    .popover-label {
+        .col(md, 4);
+        color: @text-hint;
+    }
+    .popover-value {
+        .col(md, 8);
+    }
+}

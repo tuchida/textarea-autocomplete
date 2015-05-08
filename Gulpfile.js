@@ -22,6 +22,10 @@ gulp.task('js', function () {
   }))
 });
 
+gulp.task('watch-less', ['less'], function () {
+  gulp.watch(['./src/less/**/*.less'], ['less']);
+});
+
 gulp.task('less', function () {
   return gulp.src('./src/less/**/*.less')
     .pipe(less({
