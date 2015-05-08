@@ -23,19 +23,23 @@ goog.inherits(my.app.InputHandler, goog.ui.ac.InputHandler);
 
 my.app.InputHandler.prototype.attachInput = function(target) {
   goog.base(this, 'attachInput', target);
-
   target.cp_ = new my.CaretPosition(target);
 };
 
-my.app.InputHandler.prototype.handleKeyEvent = function(e) {
-  var target = e.target;
+goog.ui.ac.InputHandler.prototype.detachInput = function(target) {
+  target.cp_.dispose();
+  target.cp_ = null;
+  goog.base(this, 'detachInput', target);
+}
+
+my.app.InputHandler.prototype.parseToken = function() {
+  var target = this.getActiveElement();
   goog.asserts.assert(target.cp_);
   var tokenData = target.cp_.detectHotTokenData();
   if (tokenData) {
     this.ac_.getRenderer().setPosition(
         new goog.math.Coordinate(tokenData.rect.left, tokenData.rect.top + tokenData.rect.height));
-    this.ac_.setToken(tokenData.token);
-    return true;
+    return tokenData.token;
   }
-  return goog.base(this, 'handleKeyEvent', e);
+  return null;
 };
