@@ -45,7 +45,8 @@ my.CaretPosition = function(target) {
   goog.style.setStyle(div, {
     'position': 'absolute',
     'visibility': 'hidden',
-    'z-index': '-9999'
+    'z-index': '-9999',
+    'overflow': 'hidden'
   });
   goog.dom.insertSiblingBefore(div, target);
   this.caret_ = doc.createElement('span');
@@ -85,9 +86,14 @@ my.CaretPosition.prototype.detectHotTokenData = function() {
           }
           var tokenWithPrefix = value.slice(start, end);
           var token = tokenWithPrefix.slice(my.CaretPosition.PREFIX.length);
-          goog.dom.setTextContent(this.container_, value.slice(0, start));
+          goog.dom.setTextContent(this.container_, value.slice(0, start).replace(/  +/g, function(h) {
+            var rv = '';
+            while (rv.length < h.length) rv += rv.length % 2 ? ' ' : '_';
+            return rv;
+          }));
           goog.dom.setTextContent(this.caret_, tokenWithPrefix);
           this.container_.appendChild(this.caret_);
+          this.container_.scrollTop = this.target_.scrollTop;
           var pos = goog.style.getClientPosition(this.caret_);
           return {
             token: token,
