@@ -1,4 +1,4 @@
-goog.provide('my.CaretPosition');
+goog.provide('my.ac.CaretPosition');
 
 goog.require('goog.Disposable');
 goog.require('goog.dom');
@@ -11,7 +11,7 @@ goog.require('goog.style');
  * @extends {goog.Disposable}
  * @param {Element} target input[type="text"] or textarea
  */
-my.CaretPosition = function(target) {
+my.ac.CaretPosition = function(target) {
   var doc = goog.dom.getDocument();
   this.target_ = target;
   var div = this.container_ = doc.createElement('div');
@@ -52,31 +52,31 @@ my.CaretPosition = function(target) {
   this.caret_ = doc.createElement('span');
   this.caret_.innerHTML = '&nbsp;';
 };
-goog.inherits(my.CaretPosition, goog.Disposable);
+goog.inherits(my.ac.CaretPosition, goog.Disposable);
 
-my.CaretPosition.SEPARATOR = ' ';
+my.ac.CaretPosition.SEPARATOR = ' ';
 
-my.CaretPosition.PREFIX = '@';
+my.ac.CaretPosition.PREFIX = '@';
 
 /**
  * @return {string?}
  */
-my.CaretPosition.prototype.detectHotTokenData = function() {
+my.ac.CaretPosition.prototype.detectHotTokenData = function() {
   var selectStart = this.target_.selectionStart;
   var value = goog.dom.forms.getValue(this.target_);
   var slicedLeft = value.slice(0, selectStart);
   for (var i = slicedLeft.length - 1; i >= 0; i--) {
     switch(slicedLeft[i]) {
-      case my.CaretPosition.SEPARATOR:
+      case my.ac.CaretPosition.SEPARATOR:
         return null;
-      case my.CaretPosition.PREFIX:
-        if (i === 0 || slicedLeft[i - 1] === my.CaretPosition.SEPARATOR) {
+      case my.ac.CaretPosition.PREFIX:
+        if (i === 0 || slicedLeft[i - 1] === my.ac.CaretPosition.SEPARATOR) {
           var slicedRight = value.slice(selectStart);
           var start = i;
           var end;
           if (slicedRight) {
             var j;
-            if ((j = slicedRight.indexOf(my.CaretPosition.SEPARATOR)) >= 0) {
+            if ((j = slicedRight.indexOf(my.ac.CaretPosition.SEPARATOR)) >= 0) {
               end = selectStart + j;
             } else {
               end = value.length;
@@ -85,7 +85,7 @@ my.CaretPosition.prototype.detectHotTokenData = function() {
             end = selectStart;
           }
           var tokenWithPrefix = value.slice(start, end);
-          var token = tokenWithPrefix.slice(my.CaretPosition.PREFIX.length);
+          var token = tokenWithPrefix.slice(my.ac.CaretPosition.PREFIX.length);
           goog.dom.setTextContent(this.container_, value.slice(0, start).replace(/  +/g, function(h) {
             var rv = '';
             while (rv.length < h.length) rv += rv.length % 2 ? ' ' : '_';
@@ -109,7 +109,7 @@ my.CaretPosition.prototype.detectHotTokenData = function() {
 /**
  * @return {!goog.math.Coordinate} The position.
  */
-my.CaretPosition.prototype.getPosition = function() {
+my.ac.CaretPosition.prototype.getPosition = function() {
   goog.dom.setTextContent(this.container_, this.getSlicedValue_());
   this.container_.appendChild(this.caret_);
   var pos = goog.style.getClientPosition(this.caret_);
@@ -117,7 +117,10 @@ my.CaretPosition.prototype.getPosition = function() {
   return pos;
 };
 
-my.CaretPosition.prototype.getSlicedValue_ = function() {
+/**
+ * @private
+ */
+my.ac.CaretPosition.prototype.getSlicedValue_ = function() {
   var value = goog.dom.forms.getValue(this.target_);
   return value.slice(0, this.target_.selectStart);
 };
