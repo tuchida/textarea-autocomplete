@@ -10,8 +10,20 @@ var config = {
 
 gulp.task('default', ['less', 'js']); 
 
+gulp.task('less', function () {
+  return gulp.src('./src/less/**/*.less')
+    .pipe(less({
+      paths: [ config.wapLessDir ]
+    }))
+    .pipe(gulp.dest('./dest'));
+});
+
 gulp.task('watch', ['less', 'js'], function () {
   gulp.watch(['./src/js/**/*.js'], ['js']);
+  gulp.watch(['./src/less/**/*.less'], ['less']);
+});
+
+gulp.task('watch-less', ['less'], function () {
   gulp.watch(['./src/less/**/*.less'], ['less']);
 });
 
@@ -20,12 +32,4 @@ gulp.task('js', function () {
   .pipe(plovr({
     // debug: true
   }))
-});
-
-gulp.task('less', function () {
-  return gulp.src('./src/less/**/*.less')
-    .pipe(less({
-      paths: [ config.wapLessDir ]
-    }))
-    .pipe(gulp.dest('./dest'));
 });

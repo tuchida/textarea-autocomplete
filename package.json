@@ -2,8 +2,9 @@
   "name": "sandbox",
   "scripts": {
     "postinstall": "gulp",
-    "plovr": "plovr build plovr.json",
-    "fixclosure": "find src -name '*.js' | xargs ./node_modules/.bin/fixclosure -f",
+    "plovr": "plovr serve plovr.json",
+    "build": "plovr build plovr.json; gulp less",
+    "fixclosure": "find src/js/ -type f | xargs fixclosure --provideRoots my,wap -f",
     "start": "gulp watch"
   },
   "author": "takamura_s@ariel-networks.com",

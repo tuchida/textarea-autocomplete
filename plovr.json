@@ -2,10 +2,9 @@
   "id": "sandbox",
   "debug": false,
   "inputs": "./src/js/main.js",
-  "closure-library": "/home/pig/ConceptDevelop/WorkSpace/CONCEPT/company-concept-design/company-framework/company-framework-client-lib/src/main/webapp/lib/closure-library/closure/goog",
+  "closure-library": "/home/pig/git/closure-library/closure/goog",
   "paths": [
-    "./src/js",
-    "/home/pig/ConceptDevelop/WorkSpace/CONCEPT/company-concept-design/company-framework/company-framework-client-lib/src/main/webapp/js"
+    "./src/js"
   ],
   "pretty-print": true,
   "mode": "ADVANCED",
