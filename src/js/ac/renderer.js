@@ -17,7 +17,7 @@ goog.inherits(my.ac.Renderer, goog.ui.ac.Renderer);
 /**
  * @param {goog.math.Coordinate}
  */
-my.ac.Renderer.prototype.setPosition = function(pos) {
+my.ac.Renderer.prototype.setNextPosition = function(pos) {
   this.pos_ = pos;
 };
 

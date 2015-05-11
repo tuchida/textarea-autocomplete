@@ -23,6 +23,18 @@ my.ac.InputHandler.SEPARATOR = ' ';
 
 my.ac.InputHandler.TOKEN_PREFIX = '@';
 
+my.ac.InputHandler.prototype.handleKeyEvent = function(e) {
+  switch (e.keyCode) {
+    case goog.events.KeyCodes.LEFT:
+    case goog.events.KeyCodes.RIGHT:
+      if (this.ac_.isOpen()) {
+        this.update(true);
+        return false;
+      }
+  }
+  goog.base(this, 'handleKeyEvent', e);
+};
+
 my.ac.InputHandler.prototype.attachInput = function(target) {
   goog.base(this, 'attachInput', target);
   target.cp_ = new my.ac.CaretPosition(target);
@@ -46,7 +58,7 @@ my.ac.InputHandler.prototype.parseToken = function() {
     var token = text.slice(my.ac.InputHandler.SEPARATOR.length + start, end);
 
     var rect = target.cp_.getPosition(start);
-    this.ac_.getRenderer().setPosition(
+    this.ac_.getRenderer().setNextPosition(
         new goog.math.Coordinate(rect.left, rect.top + rect.height));
     return token;
   }
@@ -61,8 +73,20 @@ my.ac.InputHandler.prototype.setTokenText = function(tokenText, opt_multi) {
   var start = this.getTokenIndex(text, caret);
   var end = this.getReplaceEndIndex_(text, caret);
 
-  target.value = text.slice(0, start) + my.ac.InputHandler.TOKEN_PREFIX +
-      tokenText + text.slice(end) + my.ac.InputHandler.SEPARATOR;
+  var head = text.slice(0, start) + my.ac.InputHandler.TOKEN_PREFIX + tokenText;
+  var tail = text.slice(end);
+  if (tail[0] !== my.ac.InputHandler.SEPARATOR) {
+    head += my.ac.InputHandler.SEPARATOR;
+  }
+
+  if (goog.userAgent.GECKO ||
+      (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
+    target.blur();
+  }
+  target.value = head + tail;
+  target.focus();
+
+  this.setCursorPosition(head.length + 1);
 };
 
 my.ac.InputHandler.prototype.getTokenIndex = function(text, caret) {
