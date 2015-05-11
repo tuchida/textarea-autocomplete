@@ -3,6 +3,7 @@
   "scripts": {
     "postinstall": "gulp",
     "plovr": "plovr serve plovr.json",
+    "build": "plovr build plovr.json; gulp less",
     "fixclosure": "find src/js/ -type f | xargs fixclosure --provideRoots my,wap -f",
     "start": "gulp watch"
   },

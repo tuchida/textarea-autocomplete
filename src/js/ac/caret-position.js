@@ -54,10 +54,6 @@ my.ac.CaretPosition = function(target) {
 };
 goog.inherits(my.ac.CaretPosition, goog.Disposable);
 
-my.ac.CaretPosition.SEPARATOR = ' ';
-
-my.ac.CaretPosition.PREFIX = '@';
-
 my.ac.CaretPosition.prototype.getPosition = function(index) {
   var value = goog.dom.forms.getValue(this.target_);
   // This is needed to pad multiple spaces in textarea.

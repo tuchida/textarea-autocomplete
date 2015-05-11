@@ -7,6 +7,6 @@
     "./src/js"
   ],
   "pretty-print": true,
-  "mode": "WHITESPACE",
+  "mode": "ADVANCED",
   "output-file": "./dest/main.min.js"
 }

@@ -6,13 +6,6 @@
   <link rel="stylesheet" href="./autocomplete.css" />
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
   <style type="text/css">
-    
-    div {
-      background: gray;
-    }
-    div > span {
-      background: red;
-    }
 
     .dummy-div {
       position: absolute;
@@ -23,33 +16,25 @@
     .textarea-wrapper {
       position: relative;
     }
+    .textarea {
+      width: 400px;
+      height: 300px;
+    }
+
   </style>
 </head>
 <body>
 
 
 
-
-
-
-  
-
-aaa
-<input id="txtInput1" type="" />
-
-bbb
+@名前
 <div class="textarea-wrapper">
-<textarea id="txtInput2" type="">
+<textarea class="textarea" id="txtInput2">
 </textarea>
 </div>
 
 
 
-
-
-
-
-
-<script src="http://localhost:9810/compile?id=sandbox"></script>
+<script src="http://localhost:9810/compile?id=sandbox&mode=whitespace"></script>
 </body>
 </html>

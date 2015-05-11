@@ -1,11 +1,9 @@
 goog.provide('my.ac.InputHandler');
 
-goog.require('goog.ui.ac.InputHandler');
 goog.require('goog.asserts');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.InputHandler');
-goog.require('goog.events.InputHandler.EventType');
 goog.require('goog.math.Coordinate');
+goog.require('goog.ui.ac.InputHandler');
 goog.require('my.ac.CaretPosition');
 
 /**

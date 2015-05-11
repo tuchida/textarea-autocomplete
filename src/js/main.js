@@ -1,28 +1,9 @@
-goog.require('goog.ui.ac');
+goog.require('goog.dom');
+goog.require('goog.labs.net.xhr');
 goog.require('goog.ui.ac.ArrayMatcher');
 goog.require('goog.ui.ac.AutoComplete');
-goog.require('my.ac.Renderer');
 goog.require('my.ac.InputHandler');
-
-
-
-
-
-var tcMovies = [
-    "Mission Impossible", "Top Gun","Jerry McGuire","Rain Man",
-    "Days of Thunder", "Risky Business","Interview With The Vampire",
-    "Eyes Wide Shut","Far And Away", "Jerry Maguire","The Firm","Cocktail",
-    "A Few Good Men","Legend","Taps", "The Outsiders","Losin' It",
-    "Endless Love","The Color Of Money", "All The Right Moves",
-    "Minority Report","Magnolia","Mission Impossible 2",
-    "Mission Impossible 3","Vanilla Sky","Ghost Soldiers","Few Good Men A",
-    "Color of Money The","Firm The","Mission Impossible II","Outsiders The",
-    "Young Guns","Top Gun DVD","Days of Thunder DVD","Coctail",
-    "Mission Impossible DVD","Fallen Angels Vol 1","Don't Look at Me",
-    "Young Guns uncredited"];
-
-var ac1 = goog.ui.ac.createSimpleAutoComplete(
-    tcMovies, document.getElementById('txtInput1'), false);
+goog.require('my.ac.Renderer');
 
 
 
@@ -32,31 +13,31 @@ var ac1 = goog.ui.ac.createSimpleAutoComplete(
 
 
 
+goog.labs.net.xhr.getJson('/sandbox/dummy.json')
+.then(function(userList) {
+  userList = userList.map(function(user) {
+    user.toString = function() {return this.id };
+    return user;
+  });
+  createAutoComplete(document.getElementById('txtInput2'), userList);
+});
 
 
 
 
 
 
-
-
-(function(){
-  var data = tcMovies;
-  var input = document.getElementById('txtInput2');
-  var opt_multi = true;
-
-  var matcher = new goog.ui.ac.ArrayMatcher(data, true);
-
-  var renderer = new my.ac.Renderer();
-
-  var inputHandler = new my.ac.InputHandler(null, null, !!opt_multi);
-
+function createAutoComplete(inputEl, data) {
+  var inputHandler = new my.ac.InputHandler(null, null);
+  var matcher = new goog.ui.ac.ArrayMatcher(data, true)
   var autoComplete = new goog.ui.ac.AutoComplete(
-      matcher, renderer, inputHandler);
+      matcher, new my.ac.Renderer(null, {renderRow: function(row, token, elem) {
+        goog.dom.setTextContent(elem, row.data.id + ' - ' + row.data['名前']);
+      }}), inputHandler);
   inputHandler.attachAutoComplete(autoComplete);
-  inputHandler.attachInput(input);
+  inputHandler.attachInput(inputEl);
   return autoComplete;
-})();
+}
 
 
 
