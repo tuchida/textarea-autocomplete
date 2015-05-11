@@ -8,6 +8,6 @@
     "/home/pig/ConceptDevelop/WorkSpace/CONCEPT/company-concept-design/company-framework/company-framework-client-lib/src/main/webapp/js"
   ],
   "pretty-print": true,
-  "mode": "WHITESPACE",
+  "mode": "ADVANCED",
   "output-file": "./dest/main.min.js"
 }
