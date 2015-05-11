@@ -14,7 +14,7 @@ goog.require('goog.style');
 my.ac.CaretPosition = function(target) {
   var doc = goog.dom.getDocument();
   this.target_ = target;
-  var div = this.container_ = doc.createElement('div');
+  var div = this.container_ = doc.createElement('pre');
   [
     'border-style',
     'border-bottom-width',
@@ -29,7 +29,14 @@ my.ac.CaretPosition = function(target) {
     'height',
     'letter-spacing',
     'word-spacing',
+    'word-break',
+    'word-wrap',
+    'overflow-wrap',
     'line-height',
+    'margin-bottom',
+    'margin-left',
+    'margin-right',
+    'margin-top',
     'padding-bottom',
     'padding-left',
     'padding-right',
@@ -46,7 +53,8 @@ my.ac.CaretPosition = function(target) {
     'position': 'absolute',
     'visibility': 'hidden',
     'z-index': '-9999',
-    'overflow': 'hidden'
+    'overflow': 'hidden',
+    'white-space': 'pre-wrap'
   });
   goog.dom.insertSiblingBefore(div, target);
   this.caret_ = doc.createElement('span');
@@ -56,13 +64,7 @@ goog.inherits(my.ac.CaretPosition, goog.Disposable);
 
 my.ac.CaretPosition.prototype.getPosition = function(index) {
   var value = goog.dom.forms.getValue(this.target_);
-  // This is needed to pad multiple spaces in textarea.
-  var replaced = value.slice(0, index).replace(/  +/g, function(h) {
-    var rv = '';
-    while (rv.length < h.length) rv += rv.length % 2 ? ' ' : '_';
-    return rv;
-  });
-  goog.dom.setTextContent(this.container_, replaced);
+  goog.dom.setTextContent(this.container_, value.slice(0, index));
   this.container_.appendChild(this.caret_);
   this.container_.scrollTop = this.target_.scrollTop;
   var pos = goog.style.getClientPosition(this.caret_);
