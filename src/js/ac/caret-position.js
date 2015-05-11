@@ -58,69 +58,27 @@ my.ac.CaretPosition.SEPARATOR = ' ';
 
 my.ac.CaretPosition.PREFIX = '@';
 
-/**
- * @return {string?}
- */
-my.ac.CaretPosition.prototype.detectHotTokenData = function() {
-  var selectStart = this.target_.selectionStart;
+my.ac.CaretPosition.prototype.getPosition = function(index) {
   var value = goog.dom.forms.getValue(this.target_);
-  var slicedLeft = value.slice(0, selectStart);
-  for (var i = slicedLeft.length - 1; i >= 0; i--) {
-    switch(slicedLeft[i]) {
-      case my.ac.CaretPosition.SEPARATOR:
-        return null;
-      case my.ac.CaretPosition.PREFIX:
-        if (i === 0 || slicedLeft[i - 1] === my.ac.CaretPosition.SEPARATOR) {
-          var slicedRight = value.slice(selectStart);
-          var start = i;
-          var end;
-          if (slicedRight) {
-            var j;
-            if ((j = slicedRight.indexOf(my.ac.CaretPosition.SEPARATOR)) >= 0) {
-              end = selectStart + j;
-            } else {
-              end = value.length;
-            }
-          } else {
-            end = selectStart;
-          }
-          var tokenWithPrefix = value.slice(start, end);
-          var token = tokenWithPrefix.slice(my.ac.CaretPosition.PREFIX.length);
-          goog.dom.setTextContent(this.container_, value.slice(0, start).replace(/  +/g, function(h) {
-            var rv = '';
-            while (rv.length < h.length) rv += rv.length % 2 ? ' ' : '_';
-            return rv;
-          }));
-          goog.dom.setTextContent(this.caret_, tokenWithPrefix);
-          this.container_.appendChild(this.caret_);
-          this.container_.scrollTop = this.target_.scrollTop;
-          var pos = goog.style.getClientPosition(this.caret_);
-          return {
-            token: token,
-            rect: new goog.math.Rect(pos.x, pos.y,
-                this.caret_.offsetWidth, this.caret_.offsetHeight)
-          };
-        }
-    }
-  }
-  return null;
-};
-
-/**
- * @return {!goog.math.Coordinate} The position.
- */
-my.ac.CaretPosition.prototype.getPosition = function() {
-  goog.dom.setTextContent(this.container_, this.getSlicedValue_());
+  // This is needed to pad multiple spaces in textarea.
+  var replaced = value.slice(0, index).replace(/  +/g, function(h) {
+    var rv = '';
+    while (rv.length < h.length) rv += rv.length % 2 ? ' ' : '_';
+    return rv;
+  });
+  goog.dom.setTextContent(this.container_, replaced);
   this.container_.appendChild(this.caret_);
+  this.container_.scrollTop = this.target_.scrollTop;
   var pos = goog.style.getClientPosition(this.caret_);
-  pos.y -= this.target_.scrollTop;
-  return pos;
+  return new goog.math.Rect(pos.x, pos.y,
+        this.caret_.offsetWidth, this.caret_.offsetHeight);
 };
 
 /**
- * @private
+ * @override
  */
-my.ac.CaretPosition.prototype.getSlicedValue_ = function() {
-  var value = goog.dom.forms.getValue(this.target_);
-  return value.slice(0, this.target_.selectStart);
+my.ac.CaretPosition.prototype.disposeInternal = function() {
+  goog.dom.removeNode(this.container_);
+  goog.dom.removeNode(this.caret_);
+  goog.base(this, 'disposeInternal');
 };
