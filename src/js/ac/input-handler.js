@@ -43,7 +43,7 @@ my.ac.InputHandler.prototype.parseToken = function() {
   var start = this.getTokenIndex(text, caret);
   if (start >= 0) {
     var end = this.getReplaceEndIndex_(text, caret);
-    var token = text.slice(my.ac.InputHandler.SEPARATOR.length + start, end + 1);
+    var token = text.slice(my.ac.InputHandler.SEPARATOR.length + start, end);
 
     var rect = target.cp_.getPosition(start);
     this.ac_.getRenderer().setPosition(
@@ -69,9 +69,12 @@ my.ac.InputHandler.prototype.getTokenIndex = function(text, caret) {
   for (var i = caret - 1; i >= 0; i--) {
     switch(text[i]) {
       case my.ac.InputHandler.SEPARATOR:
+      case '\n':
         return -1;
       case my.ac.InputHandler.TOKEN_PREFIX:
-        if (i === 0 || text[i - 1] === my.ac.InputHandler.SEPARATOR) {
+        if (i === 0 ||
+            text[i - 1] === my.ac.InputHandler.SEPARATOR ||
+            text[i - 1] === '\n') {
           return i;
         }
     }
@@ -83,6 +86,7 @@ my.ac.InputHandler.prototype.getReplaceEndIndex_ = function(text, caret) {
   for (var i = caret; i < text.length; i++) {
     switch(text[i]) {
       case my.ac.InputHandler.SEPARATOR:
+      case '\n':
         return i;
     }
   }
