@@ -10,19 +10,28 @@ goog.require('my.ac.CaretPosition');
  * @constructor
  * @extends {goog.ui.ac.InputHandler}
  */
-my.ac.InputHandler = function(opt_separators, opt_literals,
+my.ac.InputHandler = function(opt_literals,
     opt_throttleTime) {
-  goog.base(this, opt_separators, opt_literals,
+  goog.base(this, null, opt_literals,
       true/* Always true */, opt_throttleTime);
+  this.setSeparators(''); // We don't use this
 
-  this.eh = new goog.events.EventHandler(this);
+  /**
+   * RegExp to test token separator
+   * @type {RegExp}
+   * @private
+   */
+  this.separatorRegex_ = new RegExp('[ ,.\\n]');
 };
 goog.inherits(my.ac.InputHandler, goog.ui.ac.InputHandler);
 
-my.ac.InputHandler.SEPARATOR = ' ';
+/** @type {string} */
+my.ac.InputHandler.DEFAULT_SEPARATOR = ' ';
 
+/** @type {string} */
 my.ac.InputHandler.TOKEN_PREFIX = '@';
 
+/** @override */
 my.ac.InputHandler.prototype.handleKeyEvent = function(e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.LEFT:
@@ -35,27 +44,32 @@ my.ac.InputHandler.prototype.handleKeyEvent = function(e) {
   goog.base(this, 'handleKeyEvent', e);
 };
 
+/** @override */
 my.ac.InputHandler.prototype.attachInput = function(target) {
   goog.base(this, 'attachInput', target);
   target.cp_ = new my.ac.CaretPosition(target);
 };
 
+/** @override */
 goog.ui.ac.InputHandler.prototype.detachInput = function(target) {
-  target.cp_.dispose();
-  target.cp_ = null;
+  if (target.cp_) {
+    target.cp_.dispose();
+    target.cp_ = null;
+  }
   goog.base(this, 'detachInput', target);
 }
 
+/** @override */
 my.ac.InputHandler.prototype.parseToken = function() {
   var target = this.getActiveElement();
   goog.asserts.assert(target.cp_);
   var text = this.getValue();
   var caret = this.getCursorPosition();
 
-  var start = this.getTokenIndex(text, caret);
+  var start = this.getTokenIndexWithPrefix_(text, caret);
   if (start >= 0) {
-    var end = this.getReplaceEndIndex_(text, caret);
-    var token = text.slice(my.ac.InputHandler.SEPARATOR.length + start, end);
+    var end = this.getTokenReplaceEndIndex_(text, caret);
+    var token = text.slice(my.ac.InputHandler.TOKEN_PREFIX.length + start, end);
 
     var rect = target.cp_.getPosition(start);
     this.ac_.getRenderer().setNextPosition(
@@ -65,18 +79,19 @@ my.ac.InputHandler.prototype.parseToken = function() {
   return null;
 };
 
+/** @override */
 my.ac.InputHandler.prototype.setTokenText = function(tokenText, opt_multi) {
   var target = this.getActiveElement();
   var text = this.getValue();
   var caret = this.getCursorPosition();
 
-  var start = this.getTokenIndex(text, caret);
-  var end = this.getReplaceEndIndex_(text, caret);
+  var start = this.getTokenIndexWithPrefix_(text, caret);
+  var end = this.getTokenReplaceEndIndex_(text, caret);
 
   var head = text.slice(0, start) + my.ac.InputHandler.TOKEN_PREFIX + tokenText;
   var tail = text.slice(end);
-  if (tail[0] !== my.ac.InputHandler.SEPARATOR) {
-    head += my.ac.InputHandler.SEPARATOR;
+  if (!this.separatorRegex_.test(tail[0])) {
+    head += my.ac.InputHandler.DEFAULT_SEPARATOR;
   }
 
   if (goog.userAgent.GECKO ||
@@ -89,29 +104,35 @@ my.ac.InputHandler.prototype.setTokenText = function(tokenText, opt_multi) {
   this.setCursorPosition(head.length + 1);
 };
 
-my.ac.InputHandler.prototype.getTokenIndex = function(text, caret) {
+/**
+ * @param {string} text string to parse.
+ * @param {number} caret Position of cursor in string.
+ * @return {number} Index of token.
+ * @private
+ */
+my.ac.InputHandler.prototype.getTokenIndexWithPrefix_ = function(text, caret) {
   for (var i = caret - 1; i >= 0; i--) {
-    switch(text[i]) {
-      case my.ac.InputHandler.SEPARATOR:
-      case '\n':
-        return -1;
-      case my.ac.InputHandler.TOKEN_PREFIX:
-        if (i === 0 ||
-            text[i - 1] === my.ac.InputHandler.SEPARATOR ||
-            text[i - 1] === '\n') {
-          return i;
-        }
+    if (text[i] === my.ac.InputHandler.TOKEN_PREFIX) {
+      if (i === 0 || this.separatorRegex_.test(text[i - 1])) {
+        return i;
+      }
+    } else if (this.separatorRegex_.test(text[i])) {
+      return -1;
     }
   }
   return -1;
 };
 
-my.ac.InputHandler.prototype.getReplaceEndIndex_ = function(text, caret) {
+/**
+ * @param {string} text string to parse.
+ * @param {number} caret Position of cursor in string.
+ * @return {number} Index of token.
+ * @private
+ */
+my.ac.InputHandler.prototype.getTokenReplaceEndIndex_ = function(text, caret) {
   for (var i = caret; i < text.length; i++) {
-    switch(text[i]) {
-      case my.ac.InputHandler.SEPARATOR:
-      case '\n':
-        return i;
+    if (this.separatorRegex_.test(text[i])) {
+      return i;
     }
   }
   return text.length;
