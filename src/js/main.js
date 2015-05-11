@@ -2,7 +2,7 @@ goog.require('goog.ui.ac');
 goog.require('goog.ui.ac.ArrayMatcher');
 goog.require('goog.ui.ac.AutoComplete');
 goog.require('my.ac.Renderer');
-goog.require('my.app.InputHandler');
+goog.require('my.ac.InputHandler');
 
 
 
@@ -49,7 +49,7 @@ var ac1 = goog.ui.ac.createSimpleAutoComplete(
 
   var renderer = new my.ac.Renderer();
 
-  var inputHandler = new my.app.InputHandler(null, null, !!opt_multi);
+  var inputHandler = new my.ac.InputHandler(null, null, !!opt_multi);
 
   var autoComplete = new goog.ui.ac.AutoComplete(
       matcher, renderer, inputHandler);
