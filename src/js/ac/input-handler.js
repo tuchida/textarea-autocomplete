@@ -65,15 +65,12 @@ my.ac.InputHandler.prototype.parseToken = function() {
   goog.asserts.assert(target.cp_);
   var text = this.getValue();
   var caret = this.getCursorPosition();
-
   var start = this.getTokenIndexWithPrefix_(text, caret);
   if (start >= 0) {
     var end = this.getTokenReplaceEndIndex_(text, caret);
     var token = text.slice(my.ac.InputHandler.TOKEN_PREFIX.length + start, end);
-
-    var rect = target.cp_.getPosition(start);
-    this.ac_.getRenderer().setNextPosition(
-        new goog.math.Coordinate(rect.left, rect.top + rect.height));
+    var el = target.cp_.getPositionTarget(start, end);
+    this.ac_.getRenderer().setNextPositionTarget(el);
     return token;
   }
   return null;

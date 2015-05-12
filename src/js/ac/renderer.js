@@ -4,6 +4,7 @@ goog.require('goog.style');
 goog.require('goog.ui.ac.Renderer');
 
 
+
 /**
  * @constructor
  */
@@ -15,18 +16,28 @@ my.ac.Renderer = function(opt_parentNode, opt_customRenderer,
 goog.inherits(my.ac.Renderer, goog.ui.ac.Renderer);
 
 /**
- * @param {goog.math.Coordinate}
+ * @param {Element}
  */
-my.ac.Renderer.prototype.setNextPosition = function(pos) {
-  this.pos_ = pos;
+my.ac.Renderer.prototype.setNextPositionTarget = function(el) {
+  this.nextPositionTarget_ = el;
 };
 
 /** @override */
 my.ac.Renderer.prototype.reposition = function() {
-  if (this.pos_) {
-    goog.style.setPosition(this.element_, this.pos_);
+  if (this.nextPositionTarget_) {
+    var anchorElement = this.nextPositionTarget_;
+    var anchorCorner = this.getAnchorCorner();
+    var overflowMode = goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN;
+    if (this.showScrollbarsIfTooLarge_) {
+      this.element_.style.height = '';
+      overflowMode |= goog.positioning.Overflow.RESIZE_HEIGHT;
+    }
+    goog.positioning.positionAtAnchor(
+        anchorElement, anchorCorner,
+        this.element_, goog.positioning.flipCornerVertical(anchorCorner),
+        null, null, overflowMode);
     this.element_.style.visibility = 'visible';
-    this.pos_ = null;
+    this.nextPositionTarget_ = null;
   } else {
     goog.base(this, 'reposition');
   }

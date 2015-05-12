@@ -62,14 +62,14 @@ my.ac.CaretPosition = function(target) {
 };
 goog.inherits(my.ac.CaretPosition, goog.Disposable);
 
-my.ac.CaretPosition.prototype.getPosition = function(index) {
+my.ac.CaretPosition.prototype.getPositionTarget = function(start, end) {
   var value = goog.dom.forms.getValue(this.target_);
-  goog.dom.setTextContent(this.container_, value.slice(0, index));
-  this.container_.appendChild(this.caret_);
+  goog.dom.setTextContent(this.caret_, value.slice(start, end));
+  goog.dom.setTextContent(this.container_, value.slice(0, start));
+  goog.dom.append(this.container_, this.caret_)
+  goog.dom.append(this.container_, value.slice(end)); // Needed to simulate scrollTop
   this.container_.scrollTop = this.target_.scrollTop;
-  var pos = goog.style.getClientPosition(this.caret_);
-  return new goog.math.Rect(pos.x, pos.y,
-        this.caret_.offsetWidth, this.caret_.offsetHeight);
+  return this.caret_;
 };
 
 /**
