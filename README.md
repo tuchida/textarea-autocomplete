@@ -1,6 +1,8 @@
 
-glued-autocomplete
+textarea-autocomplete
 ===
+
+Closure Library implementation of http://qiita.com/yuku_t/items/fb92e173120d7b2e49ed
 
 ### Try Demo
 
