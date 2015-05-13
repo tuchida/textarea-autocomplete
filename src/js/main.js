@@ -13,7 +13,7 @@ goog.require('my.ac.Renderer');
 
 
 
-goog.labs.net.xhr.getJson('/sandbox/dummy.json')
+goog.labs.net.xhr.getJson('./resources/dummy.json')
 .then(function(userList) {
   userList = userList.map(function(user) {
     user.toString = function() {return this.id };

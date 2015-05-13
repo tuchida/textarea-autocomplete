@@ -2,7 +2,6 @@
   "id": "sandbox",
   "debug": false,
   "inputs": "./src/js/main.js",
-  "closure-library": "/home/pig/git/closure-library/closure/goog",
   "paths": [
     "./src/js"
   ],
