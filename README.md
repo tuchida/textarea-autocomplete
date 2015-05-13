@@ -35,3 +35,7 @@ or
 #### Want deploy to `./dest` directory?
 
 `npm run build`
+
+### License
+
+Apache v2 License
