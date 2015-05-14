@@ -1,6 +1,7 @@
 goog.provide('my.ac.Renderer');
 
-goog.require('goog.style');
+goog.require('goog.positioning');
+goog.require('goog.positioning.Overflow');
 goog.require('goog.ui.ac.Renderer');
 
 

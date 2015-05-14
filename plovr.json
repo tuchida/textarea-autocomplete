@@ -7,5 +7,6 @@
   ],
   "pretty-print": true,
   "mode": "ADVANCED",
-  "output-file": "./dest/main.min.js"
+  "output-file": "./dest/main.min.js",
+  "output-wrapper": "(function() {%output%})();"
 }

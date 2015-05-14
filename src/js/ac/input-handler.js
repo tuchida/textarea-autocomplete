@@ -1,9 +1,9 @@
 goog.provide('my.ac.InputHandler');
 
 goog.require('goog.asserts');
-goog.require('goog.events.EventHandler');
-goog.require('goog.math.Coordinate');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.ui.ac.InputHandler');
+goog.require('goog.userAgent');
 goog.require('my.ac.CaretPosition');
 
 /**
@@ -24,9 +24,6 @@ my.ac.InputHandler = function(opt_literals,
   this.separatorRegex_ = new RegExp('[ ,.\\n]');
 };
 goog.inherits(my.ac.InputHandler, goog.ui.ac.InputHandler);
-
-/** @type {string} */
-my.ac.InputHandler.DEFAULT_SEPARATOR = ' ';
 
 /** @type {string} */
 my.ac.InputHandler.TOKEN_PREFIX = '@';
@@ -85,11 +82,8 @@ my.ac.InputHandler.prototype.setTokenText = function(tokenText, opt_multi) {
   var start = this.getTokenIndexWithPrefix_(text, caret);
   var end = this.getTokenReplaceEndIndex_(text, caret);
 
-  var head = text.slice(0, start) + my.ac.InputHandler.TOKEN_PREFIX + tokenText;
+  var head = text.slice(0, start) + tokenText;
   var tail = text.slice(end);
-  if (!this.separatorRegex_.test(tail[0])) {
-    head += my.ac.InputHandler.DEFAULT_SEPARATOR;
-  }
 
   if (goog.userAgent.GECKO ||
       (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {

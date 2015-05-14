@@ -3,7 +3,6 @@ goog.provide('my.ac.CaretPosition');
 goog.require('goog.Disposable');
 goog.require('goog.dom');
 goog.require('goog.dom.forms');
-goog.require('goog.math.Rect');
 goog.require('goog.style');
 
 /**
